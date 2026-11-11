@@ -90,12 +90,7 @@ footer{color:var(--muted);font-size:.8rem;text-align:center;line-height:1.5}
 <script>
 // Para cadastrar produtos: edite esta lista. "link" = seu link de afiliado da Shopee.
 const PRODUTOS = [
-  {nome:"Bolsa transversal matelassê", cat:"Moda", preco:49.90, de:89.90, link:"https://shopee.com.br", exemplo:true},
-  {nome:"Kit 6 pincéis de maquiagem", cat:"Beleza", preco:24.90, de:39.90, link:"https://shopee.com.br", exemplo:true},
-  {nome:"Organizador de acrílico para maquiagem", cat:"Achadinhos", preco:32.50, link:"https://shopee.com.br", exemplo:true},
-  {nome:"Brinco argola dourada (par)", cat:"Moda", preco:12.90, de:19.90, link:"https://shopee.com.br", exemplo:true},
-  {nome:"Sérum facial de vitamina C 30 ml", cat:"Beleza", preco:29.90, link:"https://shopee.com.br", exemplo:true},
-  {nome:"Espelho de LED dobrável", cat:"Achadinhos", preco:44.90, de:69.90, link:"https://shopee.com.br", exemplo:true}
+  {nome:"Conjunto academia feminino: top + legging (zero transparência)", cat:"Fitness", preco:49.90, ate:59.90, link:"https://s.shopee.com.br/5fqEw8EBXA"}
 ];
 const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const cats = ["Todos", ...new Set(PRODUTOS.map(p=>p.cat))];
@@ -113,7 +108,7 @@ function render(){
   lista.forEach(p=>{
     const el=document.createElement("article"); el.className="card";
     el.innerHTML = `<div class="foto">${p.exemplo?'<small>exemplo</small>':''}${p.cat}</div>
-      <div class="info"><h3></h3><div class="preco">${brl(p.preco)}${p.de?`<s>${brl(p.de)}</s>`:""}</div>
+      <div class="info"><h3></h3><div class="preco">${p.ate?"a partir de ":""}${brl(p.preco)}${p.de?`<s>${brl(p.de)}</s>`:""}</div>
       <a target="_blank" rel="noopener">Ver na Shopee</a></div>`;
     el.querySelector("h3").textContent=p.nome; el.querySelector("a").href=p.link;
     grade.appendChild(el);
