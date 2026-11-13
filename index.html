@@ -47,14 +47,13 @@ h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.1;mar
 .chip[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:#fff}
 .grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.foto{aspect-ratio:1/1;max-width:100%;display:grid;place-items:center;font-family:var(--display);font-size:1.1rem;color:var(--rose);
+.foto{aspect-ratio:4/5;overflow:hidden;max-width:100%;display:grid;place-items:center;font-family:var(--display);font-size:1.1rem;color:var(--rose);
   background:linear-gradient(135deg,var(--blush),var(--bg));position:relative}
 .foto small{position:absolute;top:8px;left:8px;background:var(--surface);color:var(--muted);font-family:var(--body);font-size:.7rem;
   padding:2px 8px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.foto img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 .info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
 .info h3{font-size:.95rem;font-weight:500;margin:0;line-height:1.3}
-.preco{font-weight:700;color:var(--rose);font-variant-numeric:tabular-nums}
-.preco s{color:var(--muted);font-weight:400;font-size:.8rem;margin-left:4px}
 .card a{margin-top:auto;text-align:center;text-decoration:none;background:var(--blush);color:var(--ink);font-weight:600;font-size:.88rem;padding:8px;border-radius:10px}
 .vazio{color:var(--muted);text-align:center;grid-column:1/-1}
 footer{color:var(--muted);font-size:.8rem;text-align:center;line-height:1.5}
@@ -90,15 +89,14 @@ footer{color:var(--muted);font-size:.8rem;text-align:center;line-height:1.5}
 <script>
 // Para cadastrar produtos: edite esta lista. "link" = seu link de afiliado da Shopee.
 const PRODUTOS = [
-  {nome:"Blusa batinha cropped feminina de alça (verão)", cat:"Moda", preco:39.83, link:"https://s.shopee.com.br/8AXbY4nMyF"},
-  {nome:"Vestido longo floral de alça em viscolinho com lastex no busto", cat:"Moda", preco:59.00, link:"https://s.shopee.com.br/3qOcO4n0O7"},
-  {nome:"Conjunto colete + calça pantalona de alfaiataria (moda executiva)", cat:"Moda", preco:77.48, link:"https://s.shopee.com.br/7KyUYKMfBW"},
-  {nome:"Kit regatas básicas canelada em ribana (algodão + elastano)", cat:"Moda", preco:55.50, link:"https://s.shopee.com.br/9zzECeDjKO"},
-  {nome:"Kit 2 bermudas cargo femininas com cintura elástica e bolsos", cat:"Moda", preco:48.90, ate:64.90, link:"https://s.shopee.com.br/114PU4ikF0"},
-  {nome:"Kit dupla renovadores faciais Kokeshi (Pele Porcelana + Olhos Gueixa)", cat:"Beleza", preco:31.90, link:"https://s.shopee.com.br/5q9fEwM0MG"},
-  {nome:"Conjunto academia feminino: top + legging (zero transparência)", cat:"Fitness", preco:49.90, ate:59.90, link:"https://s.shopee.com.br/5fqEw8EBXA"}
+  {nome:"Blusa batinha cropped feminina de alça (verão)", cat:"Moda", img:"img/batinha.webp", link:"https://s.shopee.com.br/8AXbY4nMyF"},
+  {nome:"Vestido longo floral de alça em viscolinho com lastex no busto", cat:"Moda", img:"img/vestido.webp", link:"https://s.shopee.com.br/3qOcO4n0O7"},
+  {nome:"Conjunto colete + calça pantalona de alfaiataria (moda executiva)", cat:"Moda", img:"img/colete.webp", link:"https://s.shopee.com.br/7KyUYKMfBW"},
+  {nome:"Kit regatas básicas canelada em ribana (algodão + elastano)", cat:"Moda", img:"img/regata.webp", link:"https://s.shopee.com.br/9zzECeDjKO"},
+  {nome:"Kit 2 bermudas cargo femininas com cintura elástica e bolsos", cat:"Moda", img:"img/bermuda.webp", link:"https://s.shopee.com.br/114PU4ikF0"},
+  {nome:"Kit dupla renovadores faciais Kokeshi (Pele Porcelana + Olhos Gueixa)", cat:"Beleza", link:"https://s.shopee.com.br/5q9fEwM0MG"},
+  {nome:"Conjunto academia feminino: top + legging (zero transparência)", cat:"Fitness", img:"img/academia.webp", link:"https://s.shopee.com.br/5fqEw8EBXA"}
 ];
-const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const cats = ["Todos", ...new Set(PRODUTOS.map(p=>p.cat))];
 let atual = "Todos";
 const chips = document.getElementById("chips"), grade = document.getElementById("grade"), busca = document.getElementById("busca");
@@ -113,9 +111,10 @@ function render(){
   grade.innerHTML = lista.length ? "" : '<p class="vazio">Nenhum achadinho com esse nome ainda.</p>';
   lista.forEach(p=>{
     const el=document.createElement("article"); el.className="card";
-    el.innerHTML = `<div class="foto">${p.exemplo?'<small>exemplo</small>':''}${p.cat}</div>
-      <div class="info"><h3></h3><div class="preco">${p.ate?"a partir de ":""}${brl(p.preco)}${p.de?`<s>${brl(p.de)}</s>`:""}</div>
+    el.innerHTML = `<div class="foto">${p.img?`<img alt="" loading="lazy" width="480" height="600">`:p.cat}</div>
+      <div class="info"><h3></h3>
       <a target="_blank" rel="noopener">Ver na Shopee</a></div>`;
+    if(p.img){const i=el.querySelector("img"); i.onerror=()=>{el.querySelector(".foto").textContent=p.cat;}; i.src=p.img; i.alt="Isa usando: "+p.nome;}
     el.querySelector("h3").textContent=p.nome; el.querySelector("a").href=p.link;
     grade.appendChild(el);
   });
